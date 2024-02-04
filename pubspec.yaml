@@ -2,5 +2,9 @@ name: foo
 environment:
   sdk: '^3.2.0'
 dependencies:
+  audioplayers: ^5.2.1
   flutter:
     sdk: flutter
+flutter:
+  assets:
+    - assets/

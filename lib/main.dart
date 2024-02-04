@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:audioplayers/audioplayers.dart';
+import 'src/track.dart';
 
 void main() {
   runApp(MyApp());
+  print("Runnign!");
+  play();
 }
 
 class MyApp extends StatelessWidget {
@@ -13,9 +17,12 @@ class MyApp extends StatelessWidget {
           title: Text('Hello World App'),
         ),
         body: Center(
-          child: Text(
-            'Hello, World!',
-            style: TextStyle(fontSize: 24),
+          child: GestureDetector(
+            child: Text(
+              'Hello, World!',
+              style: TextStyle(fontSize: 24),
+            ),
+            onTap: play,
           ),
         ),
       ),
