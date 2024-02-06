@@ -5,7 +5,6 @@ import 'src/track.dart';
 void main() {
   runApp(MyApp());
   print("Runnign!");
-  play();
 }
 
 class MyApp extends StatelessWidget {
