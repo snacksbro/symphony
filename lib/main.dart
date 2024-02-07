@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'src/track.dart';
+import 'src/play_bar.dart';
 
 void main() {
   runApp(MyApp());
@@ -15,15 +16,22 @@ class MyApp extends StatelessWidget {
         appBar: AppBar(
           title: Text('Hello World App'),
         ),
-        body: Center(
-          child: GestureDetector(
-            child: Text(
-              'Hello, World!',
-              style: TextStyle(fontSize: 24),
-            ),
-            onTap: play,
-          ),
-        ),
+        body: Column(
+            // child: GestureDetector(
+            //   child: Text(
+            //     'Hello, World!',
+            //     style: TextStyle(fontSize: 24),
+            //   ),
+            //   // onTap: play,
+            // ),
+            children: <Widget>[
+              ElevatedButton.icon(
+                icon: Icon(Icons.play_arrow),
+                label: Text("Play"),
+                onPressed: play,
+              ),
+              PlayBar(),
+            ]),
       ),
     );
   }

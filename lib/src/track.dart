@@ -8,8 +8,8 @@ final player = AudioPlayer();
 void initialize() {}
 
 void play() {
-  // AssetSource track = AssetSource("../assets/roll.mp3");
   AssetSource track = AssetSource("../assets/roll.mp3");
+
   print(track.toString());
   if (!playing) {
     if (!song_selected) {
