@@ -10,7 +10,14 @@ class PlayBar extends StatefulWidget {
 class _PlayBarState extends State<PlayBar> {
   late bool playing;
   late bool songSelected;
+  late int queueIndex;
   final player = AudioPlayer();
+  List<String> currentQueue = [
+    "../assets/roll.mp3",
+    "../assets/all_star.mp3",
+    "../assets/baby_shark.mp3",
+    "../assets/number_one.mp3"
+  ];
 
   @override
   void initState() {
@@ -18,6 +25,7 @@ class _PlayBarState extends State<PlayBar> {
     super.initState();
     playing = false;
     songSelected = false;
+    queueIndex = 0;
   }
 
   @override
@@ -27,9 +35,22 @@ class _PlayBarState extends State<PlayBar> {
     super.dispose();
   }
 
+  void next() {
+    // Bound checking
+    if (queueIndex < currentQueue.length - 1)
+      queueIndex++;
+    else
+      print("OUT OF BOUNDS!");
+
+    // TODO: Redo some of the logic around songSelected
+    songSelected = false;
+    playing = false;
+    play();
+  }
+
   void play() {
     // TODO: Replace default track
-    AssetSource track = AssetSource("../assets/roll.mp3");
+    AssetSource track = AssetSource(currentQueue[queueIndex]);
 
     if (!playing) {
       if (!songSelected) {
@@ -54,12 +75,22 @@ class _PlayBarState extends State<PlayBar> {
   }
 
   Widget build(BuildContext context) {
-    return Column(
+    return Row(
       children: <Widget>[
+        ElevatedButton.icon(
+          icon: Icon(Icons.play_arrow),
+          label: Text("Prev"),
+          onPressed: play,
+        ),
         ElevatedButton.icon(
           icon: Icon(Icons.play_arrow),
           label: Text(playing ? "Stop!" : "Play!"),
           onPressed: play,
+        ),
+        ElevatedButton.icon(
+          icon: Icon(Icons.play_arrow),
+          label: Text("Next"),
+          onPressed: next,
         ),
       ],
     );
