@@ -42,13 +42,25 @@ class _PlayBarState extends State<PlayBar> {
     else
       print("OUT OF BOUNDS!");
 
-    // TODO: Redo some of the logic around songSelected
+    songSelected = false;
+    playing = false;
+    play();
+  }
+
+  void prev() {
+    // Bound checking
+    if (queueIndex > 0)
+      queueIndex--;
+    else
+      print("OUT OF BOUNDS!");
+
     songSelected = false;
     playing = false;
     play();
   }
 
   void play() {
+    // TODO: Redo some of the logic around songSelected
     // TODO: Replace default track
     AssetSource track = AssetSource(currentQueue[queueIndex]);
 
@@ -80,7 +92,7 @@ class _PlayBarState extends State<PlayBar> {
         ElevatedButton.icon(
           icon: Icon(Icons.play_arrow),
           label: Text("Prev"),
-          onPressed: play,
+          onPressed: prev,
         ),
         ElevatedButton.icon(
           icon: Icon(Icons.play_arrow),
