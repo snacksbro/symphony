@@ -1,8 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:foo/src/song_info.dart';
 
 class PlayBar extends StatefulWidget {
-  const PlayBar({super.key});
+  // TODO: Remove queueIndex since it's no longer needed
+  final Function() queueNext;
+  final Function() queuePrev;
+  final int queueIndex;
+  final String trackSource;
+
+  const PlayBar(
+      {super.key,
+      required this.queueIndex,
+      required this.queuePrev,
+      required this.trackSource,
+      required this.queueNext});
+
   @override
   State<PlayBar> createState() => _PlayBarState();
 }
@@ -10,14 +23,7 @@ class PlayBar extends StatefulWidget {
 class _PlayBarState extends State<PlayBar> {
   late bool playing;
   late bool songSelected;
-  late int queueIndex;
   final player = AudioPlayer();
-  List<String> currentQueue = [
-    "../assets/roll.mp3",
-    "../assets/all_star.mp3",
-    "../assets/baby_shark.mp3",
-    "../assets/number_one.mp3"
-  ];
 
   @override
   void initState() {
@@ -25,7 +31,6 @@ class _PlayBarState extends State<PlayBar> {
     super.initState();
     playing = false;
     songSelected = false;
-    queueIndex = 0;
   }
 
   @override
@@ -36,33 +41,24 @@ class _PlayBarState extends State<PlayBar> {
   }
 
   void next() {
-    // Bound checking
-    if (queueIndex < currentQueue.length - 1)
-      queueIndex++;
-    else
-      print("OUT OF BOUNDS!");
-
+    play();
+    widget.queueNext();
     songSelected = false;
     playing = false;
-    play();
   }
 
   void prev() {
-    // Bound checking
-    if (queueIndex > 0)
-      queueIndex--;
-    else
-      print("OUT OF BOUNDS!");
-
+    play();
+    widget.queuePrev();
     songSelected = false;
     playing = false;
-    play();
   }
 
   void play() {
     // TODO: Redo some of the logic around songSelected
     // TODO: Replace default track
-    AssetSource track = AssetSource(currentQueue[queueIndex]);
+    AssetSource track = AssetSource(widget.trackSource);
+    print("Now playing: " + widget.trackSource);
 
     if (!playing) {
       if (!songSelected) {
