@@ -59,7 +59,7 @@ class _PlayBarState extends State<PlayBar> {
     playing = false;
     // This delay needs to happen due to a Flutter bug
     // setState isn't blocking, so components can render with wrong states
-    Future.delayed(Duration(seconds: 1)).then((_) {
+    Future.delayed(Duration(milliseconds: 50)).then((_) {
       play();
     });
   }
@@ -68,7 +68,7 @@ class _PlayBarState extends State<PlayBar> {
     widget.queuePrev();
     songSelected = false;
     playing = false;
-    Future.delayed(Duration(seconds: 1)).then((_) {
+    Future.delayed(Duration(milliseconds: 50)).then((_) {
       play();
     });
   }
