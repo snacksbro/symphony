@@ -46,7 +46,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: Text('Hello World App'),
+          title: Text('Symphony (name subject to change)'),
         ),
         body: Column(children: <Widget>[
           SongInfo(songTitle: currentQueue[queueIndex]),
