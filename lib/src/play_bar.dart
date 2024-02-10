@@ -1,8 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:foo/src/song_info.dart';
 
 class PlayBar extends StatefulWidget {
-  const PlayBar({super.key});
+  // TODO: Remove queueIndex since it's no longer needed
+  final Function() queueNext;
+  final Function() queuePrev;
+  final int queueIndex;
+  final String trackSource;
+
+  const PlayBar(
+      {super.key,
+      required this.queueIndex,
+      required this.queuePrev,
+      required this.trackSource,
+      required this.queueNext});
+
   @override
   State<PlayBar> createState() => _PlayBarState();
 }
@@ -10,14 +23,9 @@ class PlayBar extends StatefulWidget {
 class _PlayBarState extends State<PlayBar> {
   late bool playing;
   late bool songSelected;
-  late int queueIndex;
+  Duration songProgress = Duration(seconds: 0);
+  Duration songDuration = Duration(seconds: 1);
   final player = AudioPlayer();
-  List<String> currentQueue = [
-    "../assets/roll.mp3",
-    "../assets/all_star.mp3",
-    "../assets/baby_shark.mp3",
-    "../assets/number_one.mp3"
-  ];
 
   @override
   void initState() {
@@ -25,7 +33,17 @@ class _PlayBarState extends State<PlayBar> {
     super.initState();
     playing = false;
     songSelected = false;
-    queueIndex = 0;
+
+    player.onPositionChanged.listen((event) {
+      setState(() {
+        songProgress = event;
+      });
+    });
+    player.onDurationChanged.listen((event) {
+      setState(() {
+        songDuration = event;
+      });
+    });
   }
 
   @override
@@ -36,33 +54,29 @@ class _PlayBarState extends State<PlayBar> {
   }
 
   void next() {
-    // Bound checking
-    if (queueIndex < currentQueue.length - 1)
-      queueIndex++;
-    else
-      print("OUT OF BOUNDS!");
-
+    widget.queueNext();
     songSelected = false;
     playing = false;
-    play();
+    // This delay needs to happen due to a Flutter bug
+    // setState isn't blocking, so components can render with wrong states
+    Future.delayed(Duration(milliseconds: 50)).then((_) {
+      play();
+    });
   }
 
   void prev() {
-    // Bound checking
-    if (queueIndex > 0)
-      queueIndex--;
-    else
-      print("OUT OF BOUNDS!");
-
+    widget.queuePrev();
     songSelected = false;
     playing = false;
-    play();
+    Future.delayed(Duration(milliseconds: 50)).then((_) {
+      play();
+    });
   }
 
   void play() {
     // TODO: Redo some of the logic around songSelected
     // TODO: Replace default track
-    AssetSource track = AssetSource(currentQueue[queueIndex]);
+    AssetSource track = AssetSource(widget.trackSource);
 
     if (!playing) {
       if (!songSelected) {
@@ -86,25 +100,56 @@ class _PlayBarState extends State<PlayBar> {
     }
   }
 
+  void update_progess(double val) {
+    setState(() {
+      songProgress = new Duration(seconds: val.toInt());
+      player.seek(songProgress);
+    });
+  }
+
+  String prettyDuration(String stringDuration) {
+    // Remove the hours
+    // int colonIndex = stringDuration.indexOf(":");
+    // stringDuration.substring(colonIndex+1);
+    String noMilString = stringDuration.split(".")[0];
+    List<String> times = noMilString.split(":");
+
+    return "${times[1]}:${times[2]}";
+  }
+
   Widget build(BuildContext context) {
-    return Row(
-      children: <Widget>[
-        ElevatedButton.icon(
-          icon: Icon(Icons.play_arrow),
-          label: Text("Prev"),
-          onPressed: prev,
+    return Column(children: <Widget>[
+      Row(children: <Widget>[
+        Text("-" + prettyDuration((songProgress - songDuration).toString())),
+        Slider(
+          value: songProgress.inSeconds.toDouble(),
+          max: songDuration.inSeconds.toDouble(),
+          // Seems as silky as I can make it is per second
+          // TODO: Look into firing the event more often?
+          divisions: songDuration.inSeconds,
+          onChanged: update_progess,
         ),
-        ElevatedButton.icon(
-          icon: Icon(Icons.play_arrow),
-          label: Text(playing ? "Stop!" : "Play!"),
-          onPressed: play,
-        ),
-        ElevatedButton.icon(
-          icon: Icon(Icons.play_arrow),
-          label: Text("Next"),
-          onPressed: next,
-        ),
-      ],
-    );
+        Text(prettyDuration(songDuration.toString()))
+      ]),
+      Row(
+        children: <Widget>[
+          ElevatedButton.icon(
+            icon: Icon(Icons.play_arrow),
+            label: Text("Prev"),
+            onPressed: prev,
+          ),
+          ElevatedButton.icon(
+            icon: Icon(Icons.play_arrow),
+            label: Text(playing ? "Stop!" : "Play!"),
+            onPressed: play,
+          ),
+          ElevatedButton.icon(
+            icon: Icon(Icons.play_arrow),
+            label: Text("Next"),
+            onPressed: next,
+          ),
+        ],
+      )
+    ]);
   }
 }
