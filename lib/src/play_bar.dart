@@ -101,16 +101,30 @@ class _PlayBarState extends State<PlayBar> {
     });
   }
 
+  String prettyDuration(String stringDuration) {
+    // Remove the hours
+    // int colonIndex = stringDuration.indexOf(":");
+    // stringDuration.substring(colonIndex+1);
+    String noMilString = stringDuration.split(".")[0];
+    List<String> times = noMilString.split(":");
+
+    return "${times[1]}:${times[2]}";
+  }
+
   Widget build(BuildContext context) {
     return Column(children: <Widget>[
-      Slider(
-        value: songProgress.inSeconds.toDouble(),
-        max: songDuration.inSeconds.toDouble(),
-        // Seems as silky as I can make it is per second
-        // TODO: Look into firing the event more often?
-        divisions: songDuration.inSeconds,
-        onChanged: update_progess,
-      ),
+      Row(children: <Widget>[
+        Text("-" + prettyDuration((songProgress - songDuration).toString())),
+        Slider(
+          value: songProgress.inSeconds.toDouble(),
+          max: songDuration.inSeconds.toDouble(),
+          // Seems as silky as I can make it is per second
+          // TODO: Look into firing the event more often?
+          divisions: songDuration.inSeconds,
+          onChanged: update_progess,
+        ),
+        Text(prettyDuration(songDuration.toString()))
+      ]),
       Row(
         children: <Widget>[
           ElevatedButton.icon(
