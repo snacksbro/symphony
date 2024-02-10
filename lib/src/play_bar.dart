@@ -23,6 +23,8 @@ class PlayBar extends StatefulWidget {
 class _PlayBarState extends State<PlayBar> {
   late bool playing;
   late bool songSelected;
+  Duration songProgress = Duration(seconds: 0);
+  Duration songDuration = Duration(seconds: 1);
   final player = AudioPlayer();
 
   @override
@@ -31,6 +33,17 @@ class _PlayBarState extends State<PlayBar> {
     super.initState();
     playing = false;
     songSelected = false;
+
+    player.onPositionChanged.listen((event) {
+      setState(() {
+        songProgress = event;
+      });
+    });
+    player.onDurationChanged.listen((event) {
+      setState(() {
+        songDuration = event;
+      });
+    });
   }
 
   @override
@@ -58,7 +71,6 @@ class _PlayBarState extends State<PlayBar> {
     // TODO: Redo some of the logic around songSelected
     // TODO: Replace default track
     AssetSource track = AssetSource(widget.trackSource);
-    print("Now playing: " + widget.trackSource);
 
     if (!playing) {
       if (!songSelected) {
@@ -82,25 +94,42 @@ class _PlayBarState extends State<PlayBar> {
     }
   }
 
+  void update_progess(double val) {
+    setState(() {
+      songProgress = new Duration(seconds: val.toInt());
+      player.seek(songProgress);
+    });
+  }
+
   Widget build(BuildContext context) {
-    return Row(
-      children: <Widget>[
-        ElevatedButton.icon(
-          icon: Icon(Icons.play_arrow),
-          label: Text("Prev"),
-          onPressed: prev,
-        ),
-        ElevatedButton.icon(
-          icon: Icon(Icons.play_arrow),
-          label: Text(playing ? "Stop!" : "Play!"),
-          onPressed: play,
-        ),
-        ElevatedButton.icon(
-          icon: Icon(Icons.play_arrow),
-          label: Text("Next"),
-          onPressed: next,
-        ),
-      ],
-    );
+    return Column(children: <Widget>[
+      Slider(
+        value: songProgress.inSeconds.toDouble(),
+        max: songDuration.inSeconds.toDouble(),
+        // Seems as silky as I can make it is per second
+        // TODO: Look into firing the event more often?
+        divisions: songDuration.inSeconds,
+        onChanged: update_progess,
+      ),
+      Row(
+        children: <Widget>[
+          ElevatedButton.icon(
+            icon: Icon(Icons.play_arrow),
+            label: Text("Prev"),
+            onPressed: prev,
+          ),
+          ElevatedButton.icon(
+            icon: Icon(Icons.play_arrow),
+            label: Text(playing ? "Stop!" : "Play!"),
+            onPressed: play,
+          ),
+          ElevatedButton.icon(
+            icon: Icon(Icons.play_arrow),
+            label: Text("Next"),
+            onPressed: next,
+          ),
+        ],
+      )
+    ]);
   }
 }
