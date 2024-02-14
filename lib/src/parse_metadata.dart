@@ -20,10 +20,6 @@ class MetaObject {
     songTitle = songMetadata[2];
   }
 
-  String getTitle() {
-    return songTitle;
-  }
-
   // Future<Uint8List> loadSong() async {
 
   // Convert the data to UTF-8 encoding

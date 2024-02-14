@@ -15,10 +15,11 @@ class _SongInfoState extends State<SongInfo> {
     return FutureBuilder<void>(
         future: realTitle.initialize(),
         builder: (context, snapshot) {
-          // realTitle.initialize();
-          print("Song title" + realTitle.songArtist);
-          return Row(
-              children: <Widget>[Text('Now Playing: ${realTitle.songTitle}')]);
+          return Column(children: <Widget>[
+            Text('Song Artist: ${realTitle.songArtist}'),
+            Text('Song Album: ${realTitle.songAlbum}'),
+            Text('Now Playing: ${realTitle.songTitle}')
+          ]);
         });
   }
 }
