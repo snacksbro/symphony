@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'dart:typed_data';
 import 'dart:convert';
@@ -15,9 +14,18 @@ class MetaObject {
 
   Future<void> initialize() async {
     List<String> songMetadata = await getHeader();
-    songArtist = songMetadata[0];
-    songAlbum = songMetadata[1];
-    songTitle = songMetadata[2];
+    songArtist = trimToHeaderChar(songMetadata[0]);
+    songAlbum = trimToHeaderChar(songMetadata[1]);
+    songTitle = trimToHeaderChar(songMetadata[2]);
+  }
+
+  String trimToHeaderChar(String str) {
+    for (int i = 0; i < str.length; i++) {
+      if (str.codeUnitAt(i) == 3) {
+        return str.substring(i + 1);
+      }
+    }
+    return str;
   }
 
   // Future<Uint8List> loadSong() async {
