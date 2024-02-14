@@ -12,9 +12,13 @@ class SongInfo extends StatefulWidget {
 class _SongInfoState extends State<SongInfo> {
   Widget build(BuildContext context) {
     MetaObject realTitle = new MetaObject(widget.songTitle);
-    realTitle.loadSong();
-    // return Row(children: <Widget>[Text('Now Playing: ${widget.songTitle}')]);
-    return Row(
-        children: <Widget>[Text('Now Playing: ${realTitle.getTitle()}')]);
+    return FutureBuilder<void>(
+        future: realTitle.initialize(),
+        builder: (context, snapshot) {
+          // realTitle.initialize();
+          print("Song title" + realTitle.songArtist);
+          return Row(
+              children: <Widget>[Text('Now Playing: ${realTitle.songTitle}')]);
+        });
   }
 }
