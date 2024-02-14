@@ -15,6 +15,7 @@ class _MyAppState extends State<MyApp> {
   // State variables
   int queueIndex = 0;
   List<String> currentQueue = [
+    "../assets/bees.mp3",
     "../assets/roll.mp3",
     "../assets/all_star.mp3",
     "../assets/baby_shark.mp3",
