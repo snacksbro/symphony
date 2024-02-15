@@ -22,6 +22,9 @@ class MetaObject {
 
   String trimToHeaderChar(String str) {
     for (int i = 0; i < str.length; i++) {
+      // Basically, if the char it finds AND the next one isn't unicode junk
+      // Then return the string from that point forward
+      // The "AND" part is because sometimes "real" unicode characters leak
       if (str.codeUnitAt(i) >= 32 && str.codeUnitAt(i + 1) >= 32) {
         return str.substring(i);
       }
@@ -68,8 +71,15 @@ class MetaObject {
       },
       'settings': {
         // DONT TOUCH THIS INDEX
+        // This is probably another edge case wherein settings are at the end
+        // and have no content, making a huge stink
         'start': decoded_header.lastIndexOf("TSSE"),
         'end': decoded_header.lastIndexOf("TSSE"),
+        'value': ""
+      },
+      'comment': {
+        'start': decoded_header.lastIndexOf("COMM") + 4,
+        'end': decoded_header.lastIndexOf("COMM"),
         'value': ""
       }
     };
@@ -77,13 +87,16 @@ class MetaObject {
     // Grab all the start positions and sort ascending
     List<int> startPositions = [];
     metaInfo.forEach((key, value) {
-      startPositions.add(value['start']);
+      // Handling base case for missing tags
+      if (value["start"] != -1) startPositions.add(value['start']);
       startPositions.sort();
     });
 
     // Figuring out where each end is
     metaInfo.forEach((key, value) {
       for (int i = 0; i < startPositions.length; i++) {
+        // Handling base case for missing tags
+        if (value["start"] == -1) break;
         if (startPositions[i] > value['start']) {
           value["end"] = startPositions[i] - 4;
           print("${key} set to ${value['end']}");
@@ -96,8 +109,11 @@ class MetaObject {
 
     // Write to map and print
     metaInfo.forEach((key, value) {
-      value['value'] = decoded_header.substring(value['start'], value['end']);
-      print("${key} ${value['start']}:${value['end']}");
+      // Handling base case for missing tags
+      if (value["start"] != -1) {
+        value['value'] = decoded_header.substring(value['start'], value['end']);
+        print("${key} ${value['start']}:${value['end']}");
+      }
     });
 
     // Map artistStart = {'artist': decoded_header.lastIndexOf("TPE1")};
