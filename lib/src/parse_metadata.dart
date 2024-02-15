@@ -22,8 +22,8 @@ class MetaObject {
 
   String trimToHeaderChar(String str) {
     for (int i = 0; i < str.length; i++) {
-      if (str.codeUnitAt(i) == 3) {
-        return str.substring(i + 1);
+      if (str.codeUnitAt(i) >= 32 && str.codeUnitAt(i + 1) >= 32) {
+        return str.substring(i);
       }
     }
     return str;
@@ -52,7 +52,6 @@ class MetaObject {
     // Second approach
     Map metaInfo = {
       'album': {
-        // I misinterpreted what lastIndexOf does apparently
         'start': decoded_header.lastIndexOf("TALB") + 4,
         'end': decoded_header.lastIndexOf("TALB"),
         'value': ""
@@ -68,7 +67,8 @@ class MetaObject {
         'value': ""
       },
       'settings': {
-        'start': decoded_header.lastIndexOf("TSSE") + 4,
+        // DONT TOUCH THIS INDEX
+        'start': decoded_header.lastIndexOf("TSSE"),
         'end': decoded_header.lastIndexOf("TSSE"),
         'value': ""
       }
@@ -100,7 +100,35 @@ class MetaObject {
       print("${key} ${value['start']}:${value['end']}");
     });
 
-    // TODO: Remove these variables
+    // Map artistStart = {'artist': decoded_header.lastIndexOf("TPE1")};
+    // Map titleStart = {'title': decoded_header.lastIndexOf("TIT2")};
+    // Map settingsStart = {'settings': decoded_header.lastIndexOf("TSSE")};
+    // Map albumEnd = {'album': 0};
+    // Map artistEnd = {'artist': 0};
+    // Map titleEnd = {'title': 0};
+    // Map settingsEnd = {'settings': 0};
+    // List<Map> tagIndexes = [albumStart, artistStart, titleStart, settingsStart];
+
+    // tagIndexes.sort((a, b) => a.values.first.compareTo(b.values.first));
+    // for (int i = 0; i < tagIndexes.length; i++) {
+    //   tagIndexes[i].forEach((key, value) {});
+    // }
+    // tagIndexes.sort((a, b) => (b['age']).compareTo(a['age']));
+
+    // Parse out the values
+    // List<String> album_arr = decoded_header.split("TALB");
+    // List<String> artist_arr = album_arr[1].split("TPE1");
+    // String song_album = artist_arr[0];
+    // List<String> title_arr = artist_arr[1].split("TIT2");
+    // String song_artist = title_arr[0];
+    // List<String> newline_arr = title_arr[1].split("TSSE");
+    // String song_title = newline_arr[0];
+
+    // Printing for good measure
+    // print("TITLE IS " + song_title);
+    // print("ALBUM IS " + song_album);
+    // print("ARTIST IS " + song_artist);
+    // Preceeds ^C for chars? May be how to fix the title
     String song_artist = metaInfo['artist']['value'];
     String song_album = metaInfo['album']['value'];
     String song_title = metaInfo['title']['value'];
