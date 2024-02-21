@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:foo/src/song_info.dart';
 import 'src/play_bar.dart';
 
+var THEME_BG_COLOR = Colors.grey;
+var THEME_FONT_COLOR = Colors.white;
 void main() {
   runApp(MyApp());
 }
@@ -46,10 +48,16 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
+        backgroundColor: THEME_BG_COLOR,
         appBar: AppBar(
-          title: Text('Symphony (name subject to change)'),
+          backgroundColor: THEME_BG_COLOR,
+          title: Text(
+            'Symphony (name subject to change)',
+            style: TextStyle(color: THEME_FONT_COLOR),
+          ),
         ),
         body: Column(children: <Widget>[
+          Spacer(),
           SongInfo(songTitle: currentQueue[queueIndex]),
           PlayBar(
               queueIndex: queueIndex,

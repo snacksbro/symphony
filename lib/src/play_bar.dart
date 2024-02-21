@@ -121,32 +121,40 @@ class _PlayBarState extends State<PlayBar> {
     return Column(children: <Widget>[
       Row(children: <Widget>[
         Text("-" + prettyDuration((songProgress - songDuration).toString())),
-        Slider(
-          value: songProgress.inSeconds.toDouble(),
-          max: songDuration.inSeconds.toDouble(),
-          // Seems as silky as I can make it is per second
-          // TODO: Look into firing the event more often?
-          divisions: songDuration.inSeconds,
-          onChanged: update_progess,
+        Expanded(
+          child: Slider(
+            value: songProgress.inSeconds.toDouble(),
+            max: songDuration.inSeconds.toDouble(),
+            // Seems as silky as I can make it is per second
+            // TODO: Look into firing the event more often?
+            divisions: songDuration.inSeconds,
+            onChanged: update_progess,
+          ),
         ),
         Text(prettyDuration(songDuration.toString()))
       ]),
       Row(
         children: <Widget>[
-          ElevatedButton.icon(
-            icon: Icon(Icons.play_arrow),
-            label: Text("Prev"),
-            onPressed: prev,
+          Expanded(
+            child: ElevatedButton.icon(
+              icon: Icon(Icons.play_arrow),
+              label: Text("Prev"),
+              onPressed: prev,
+            ),
           ),
-          ElevatedButton.icon(
-            icon: Icon(Icons.play_arrow),
-            label: Text(playing ? "Stop!" : "Play!"),
-            onPressed: play,
+          Expanded(
+            child: ElevatedButton.icon(
+              icon: Icon(Icons.play_arrow),
+              label: Text(playing ? "Stop!" : "Play!"),
+              onPressed: play,
+            ),
           ),
-          ElevatedButton.icon(
-            icon: Icon(Icons.play_arrow),
-            label: Text("Next"),
-            onPressed: next,
+          Expanded(
+            child: ElevatedButton.icon(
+              icon: Icon(Icons.play_arrow),
+              label: Text("Next"),
+              onPressed: next,
+            ),
           ),
         ],
       )
