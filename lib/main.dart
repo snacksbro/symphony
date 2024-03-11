@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:foo/src/song_info.dart';
+import 'package:foo/src/album_art.dart';
 import 'src/play_bar.dart';
 
 var THEME_BG_COLOR = Colors.grey;
@@ -58,6 +59,7 @@ class _MyAppState extends State<MyApp> {
         ),
         body: Column(children: <Widget>[
           Spacer(),
+          AlbumArt(songPath: currentQueue[queueIndex]),
           SongInfo(songTitle: currentQueue[queueIndex]),
           PlayBar(
               queueIndex: queueIndex,
