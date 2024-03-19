@@ -137,27 +137,14 @@ class _PlayBarState extends State<PlayBar> {
       Row(
         children: <Widget>[
           Expanded(
-            child: ElevatedButton.icon(
-              icon: Icon(FontAwesomeIcons.backwardStep),
-              label: Text("Prev"),
-              onPressed: prev,
-            ),
-          ),
+              child: IconButton(
+                  onPressed: prev, icon: Icon(FontAwesomeIcons.backwardStep))),
           Expanded(
-            child: ElevatedButton.icon(
-              icon: Icon(
-                  playing ? FontAwesomeIcons.pause : FontAwesomeIcons.play),
-              label: Text(playing ? "Stop!" : "Play!"),
-              onPressed: play,
-            ),
-          ),
+              child: IconButton(
+                  onPressed: prev, icon: Icon(FontAwesomeIcons.play))),
           Expanded(
-            child: ElevatedButton.icon(
-              icon: Icon(FontAwesomeIcons.forwardStep),
-              label: Text("Next"),
-              onPressed: next,
-            ),
-          ),
+              child: IconButton(
+                  onPressed: prev, icon: Icon(FontAwesomeIcons.forwardStep))),
         ],
       )
     ]);
