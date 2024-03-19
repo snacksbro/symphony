@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:foo/src/song_info.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class PlayBar extends StatefulWidget {
   // TODO: Remove queueIndex since it's no longer needed
@@ -137,21 +138,22 @@ class _PlayBarState extends State<PlayBar> {
         children: <Widget>[
           Expanded(
             child: ElevatedButton.icon(
-              icon: Icon(Icons.play_arrow),
+              icon: Icon(FontAwesomeIcons.backwardStep),
               label: Text("Prev"),
               onPressed: prev,
             ),
           ),
           Expanded(
             child: ElevatedButton.icon(
-              icon: Icon(Icons.play_arrow),
+              icon: Icon(
+                  playing ? FontAwesomeIcons.pause : FontAwesomeIcons.play),
               label: Text(playing ? "Stop!" : "Play!"),
               onPressed: play,
             ),
           ),
           Expanded(
             child: ElevatedButton.icon(
-              icon: Icon(Icons.play_arrow),
+              icon: Icon(FontAwesomeIcons.forwardStep),
               label: Text("Next"),
               onPressed: next,
             ),
