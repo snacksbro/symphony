@@ -5,6 +5,7 @@ dependencies:
   audioplayers: ^5.2.1
   flutter:
     sdk: flutter
+  font_awesome_flutter: ^10.7.0
 flutter:
   assets:
     - assets/
