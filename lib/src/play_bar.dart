@@ -141,10 +141,13 @@ class _PlayBarState extends State<PlayBar> {
                   onPressed: prev, icon: Icon(FontAwesomeIcons.backwardStep))),
           Expanded(
               child: IconButton(
-                  onPressed: prev, icon: Icon(FontAwesomeIcons.play))),
+                  onPressed: play,
+                  icon: Icon(playing
+                      ? FontAwesomeIcons.stop
+                      : FontAwesomeIcons.play))),
           Expanded(
               child: IconButton(
-                  onPressed: prev, icon: Icon(FontAwesomeIcons.forwardStep))),
+                  onPressed: next, icon: Icon(FontAwesomeIcons.forwardStep))),
         ],
       )
     ]);
