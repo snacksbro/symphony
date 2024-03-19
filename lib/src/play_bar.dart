@@ -143,7 +143,7 @@ class _PlayBarState extends State<PlayBar> {
               child: IconButton(
                   onPressed: play,
                   icon: Icon(playing
-                      ? FontAwesomeIcons.stop
+                      ? FontAwesomeIcons.pause
                       : FontAwesomeIcons.play))),
           Expanded(
               child: IconButton(
